@@ -1,103 +1,106 @@
 const httpStatus = require('http-status');
-const { Products } = require('../models');
+const { Product } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
- * Create a user
+ * Create a product
  * @param {Object} productBody
- * @returns {Promise<Products>}
+ * @returns {Promise<Product>}
  */
-const createProducts = async (productBody) => {
+const createProduct = async (productBody) => {
   try {
-    return await Products.create(productBody);
+    return await Product.create(productBody);
   } catch (error) {
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Product creation failed');
   }
 };
 
-const getProducts = async (req) => {
-  const { page = 1, limit = 10 } = req.query;
-  const p = parseInt(page, 10);
-  const l = parseInt(limit, 10);
-
-  const total = await Products.find().count();
-
-  const results = await Products.aggregate([
+/**
+ * Get all products with optional aggregation and pagination
+ * @param {Object} filter - MongoDB filter
+ * @returns {Promise<Object>}
+ */
+const getAllProducts = async (filter = {}) => {
+  const results = await Product.aggregate([
     {
       $lookup: {
-        from: 'categories',
-        localField: 'CategoryId',
+        from: 'products', // Ensure this matches the correct collection name
+        localField: '_id',
         foreignField: '_id',
-        as: 'category',
+        as: 'productDetails',
       },
     },
-  ])
-    .skip((p - 1) * l)
-    .limit(l);
+    { $match: filter },
+  ]);
 
-  const data = { totalResults: total, limit: l, page: p, results: results || [] };
+  const total = results.length;
+  const data = {
+    totalResults: total,
+    results: results || [],
+  };
   return data;
 };
 
 /**
- * Query for users
- * @param {Object} filter - Mongo filter
+ * Query for products with pagination
+ * @param {Object} filter - MongoDB filter
  * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
- * @param {number} [options.limit] - Maximum number of results per page (default = 10)
- * @param {number} [options.page] - Current page (default = 1)
- * @returns {Promise<QueryResult>}
+ * @returns {Promise<Object>}
  */
 const queryProducts = async (filter, options) => {
-  const products = await Products.paginate(filter, options);
+  const products = await Product.paginate(filter, options);
   return products;
 };
 
 /**
- * Get user by id
+ * Get product by id
  * @param {ObjectId} id
- * @returns {Promise<Products>}
+ * @returns {Promise<Product>}
  */
 const getProductById = async (id) => {
-  return Products.findById(id);
+  const product = await Product.findById(id);
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+  }
+  return product;
 };
 
 /**
- * Update user by id
+ * Update product by id
  * @param {ObjectId} productId
  * @param {Object} updateBody
- * @returns {Promise<Products>}
+ * @returns {Promise<Product>}
  */
 const updateProductById = async (productId, updateBody) => {
-  const Product = await getProductById(productId);
-  if (!Product) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  const product = await getProductById(productId);
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
 
-  Object.assign(Product, updateBody);
-  await Product.save();
-  return Product;
+  Object.assign(product, updateBody);
+  await product.save();
+  return product;
 };
 
 /**
- * Delete user by id
+ * Delete product by id
  * @param {ObjectId} productId
- * @returns {Promise<Products>}
+ * @returns {Promise<Product>}
  */
 const deleteProductById = async (productId) => {
   const product = await getProductById(productId);
   if (!product) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
   await product.remove();
   return product;
 };
 
 module.exports = {
-  createProducts,
+  createProduct,
+  getAllProducts,
   queryProducts,
   getProductById,
   updateProductById,
   deleteProductById,
-  getProducts,
 };

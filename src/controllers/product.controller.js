@@ -2,45 +2,62 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { productsService } = require('../services');
+const { productService } = require('../services');
 
-const createProducts = catchAsync(async (req, res) => {
-  const product = await productsService.createProducts(req.body);
+/**
+ * Create a product
+ */
+const createProduct = catchAsync(async (req, res) => {
+  const product = await productService.createProduct(req.body);
   res.status(httpStatus.CREATED).send(product);
 });
 
+/**
+ * Get all products
+ */
 const getProducts = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['CategoryId', 'status']);
-  const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  const result = await productsService.queryProducts(filter, options);
+  const filter = pick(req.query, ['ProductId', 'status']); // You can add more filters if needed
+  const result = await productService.getAllProducts(filter);
   res.send(result);
 });
 
+/**
+ * Get products by categories or other filters
+ */
 const getProductsByCategories = catchAsync(async (req, res) => {
-  const result = await productsService.getProducts(req);
+  const result = await productService.getAllProducts(req.query); // Pass the query params directly
   res.send(result);
 });
 
+/**
+ * Get a product by id
+ */
 const getProduct = catchAsync(async (req, res) => {
-  const product = await productsService.getProductById(req.params.productId);
+  const product = await productService.getProductById(req.params.productId);
   if (!product) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
   res.send(product);
 });
 
+/**
+ * Update product by id
+ */
 const updateProduct = catchAsync(async (req, res) => {
-  const product = await productsService.updateProductById(req.params.productId, req.body);
+  const product = await productService.updateProductById(req.params.productId, req.body);
   res.send(product);
 });
 
+/**
+ * Delete product by id
+ */
 const deleteProduct = catchAsync(async (req, res) => {
-  await productsService.deleteProductById(req.params.productId);
+  await productService.deleteProductById(req.params.productId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
 module.exports = {
-  createProducts,
+  createProduct,
   getProducts,
   getProduct,
   updateProduct,
