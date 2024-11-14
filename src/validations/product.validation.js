@@ -1,13 +1,51 @@
 const Joi = require('joi');
 const { objectId } = require('./custom.validation');
 
+// Schema for size within a style
+const sizeSchema = Joi.object({
+  _id: Joi.string().custom(objectId).optional(),
+  name: Joi.string().required(),
+  image: Joi.string().uri().optional(),
+  price: Joi.number().required(),
+});
+
+// Schema for a style within a description
+const styleSchema = Joi.object({
+  _id: Joi.string().custom(objectId).optional(),
+  name: Joi.string().required(),
+  image: Joi.string().uri().optional(),
+  sizes: Joi.array().items(sizeSchema).required(),
+  basePrice: Joi.number().required(),
+});
+
+// Schema for an option (used for all types of options)
+const optionSchema = Joi.object({
+  _id: Joi.string().custom(objectId).optional(),
+  type: Joi.string().required(),
+  title: Joi.string().required(),
+  image: Joi.string().uri().optional(),
+});
+
+// Schema for a description with styles and options
+const descriptionSchema = Joi.object({
+  descriptionTitle: Joi.string().optional(),
+  text: Joi.string().optional(),
+  images: Joi.array().items(Joi.string().uri()).required(),
+  styles: Joi.array().items(styleSchema).required(),
+  options: Joi.array().items(optionSchema).optional(), // Unified options array
+  comments: Joi.string().optional(), // Optional comments field
+});
+
+// Validation schema for creating a product
 const createProduct = {
   body: Joi.object().keys({
-    name: Joi.string().required(),
-    image: Joi.string().required(),
+    title: Joi.string().required(),
+    image: Joi.string().uri().required(),
+    descriptions: Joi.array().items(descriptionSchema).required(),
   }),
 };
 
+// Validation schema for getting multiple products with pagination
 const getProducts = {
   query: Joi.object().keys({
     sortBy: Joi.string(),
@@ -16,27 +54,31 @@ const getProducts = {
   }),
 };
 
+// Validation schema for getting a single product by ID
 const getProduct = {
   params: Joi.object().keys({
-    productId: Joi.string().custom(objectId),
+    productId: Joi.string().custom(objectId).required(),
   }),
 };
 
+// Validation schema for updating a product
 const updateProduct = {
   params: Joi.object().keys({
-    productId: Joi.required().custom(objectId),
+    productId: Joi.string().custom(objectId).required(),
   }),
   body: Joi.object()
     .keys({
-      name: Joi.string(),
-      Image: Joi.array().required(),
+      title: Joi.string(),
+      image: Joi.string().uri(),
+      descriptions: Joi.array().items(descriptionSchema),
     })
-    .min(1),
+    .min(1), // Ensures at least one field is being updated
 };
 
+// Validation schema for deleting a product
 const deleteProduct = {
   params: Joi.object().keys({
-    productId: Joi.string().custom(objectId),
+    productId: Joi.string().custom(objectId).required(),
   }),
 };
 
