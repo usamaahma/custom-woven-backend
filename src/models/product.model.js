@@ -4,7 +4,12 @@ const { toJSON, paginate } = require('./plugins');
 const sizeSchema = new mongoose.Schema({
   name: { type: String, required: true }, // e.g., "S", "M", "L"
   image: { type: String },
-  price: { type: Number, required: true }, // Specific price for this size
+  quantityPrice: [
+    {
+      quantity: { type: Number, required: true }, // Quantity for the size
+      price: { type: Number, required: true }, // Price for the specific quantity
+    },
+  ],
 });
 
 const styleSchema = new mongoose.Schema({
@@ -14,9 +19,13 @@ const styleSchema = new mongoose.Schema({
   basePrice: { type: Number, required: true }, // Base price for the style
 });
 const optionsSchema = new mongoose.Schema({
-  type: { type: String, required: true }, // This could be "versions", "proofOptions", etc.
-  title: { type: String },
-  image: { type: String },
+  type: { type: String, required: true }, // e.g., "versions", "proofOptions", etc.
+  cards: [
+    {
+      title: { type: String }, // Title for each card
+      image: { type: String }, // Image URL for each card
+    },
+  ],
 });
 const descriptionSchema = new mongoose.Schema({
   descriptionTitle: { type: String },

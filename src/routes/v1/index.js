@@ -2,7 +2,7 @@ const express = require('express');
 const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const productRoute = require('./product.route');
-const productDescriptionRoute = require('./orderDescription.route');
+const orderDescriptionRoute = require('./orderDescription.route');
 const getQuoteRoute = require('./getQuote.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
@@ -23,8 +23,8 @@ const defaultRoutes = [
     route: productRoute,
   },
   {
-    path: '/productdescription',
-    route: productDescriptionRoute,
+    path: '/orderdescription',
+    route: orderDescriptionRoute,
   },
   {
     path: '/getquote',
