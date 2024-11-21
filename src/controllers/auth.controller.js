@@ -7,6 +7,31 @@ const register = catchAsync(async (req, res) => {
   const tokens = await tokenService.generateAuthTokens(user);
   res.status(httpStatus.CREATED).send({ user, tokens });
 });
+const registerGoogle = catchAsync(async (req, res) => {
+  const { email, name, googleId, role } = req.body;
+
+  // Check if the user exists by email
+  let user = await userService.getUserByEmail(email);
+
+  if (!user) {
+    // If user doesn't exist, create a new one
+    user = await userService.createUser({
+      email,
+      name,
+      googleId,
+      role,
+    });
+  } else if (!user.googleId) {
+    // If user exists but doesn't have a Google ID, link it
+    user.googleId = googleId;
+    await user.save();
+  }
+
+  // Generate auth tokens
+  const tokens = await tokenService.generateAuthTokens(user);
+
+  res.status(httpStatus.CREATED).send({ user, tokens });
+});
 
 const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
@@ -56,4 +81,5 @@ module.exports = {
   resetPassword,
   sendVerificationEmail,
   verifyEmail,
+  registerGoogle,
 };

@@ -4,6 +4,7 @@ const userRoute = require('./user.route');
 const productRoute = require('./product.route');
 const orderDescriptionRoute = require('./orderDescription.route');
 const getQuoteRoute = require('./getQuote.route');
+const hangtagRoute = require('./hangtag.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 
@@ -29,6 +30,10 @@ const defaultRoutes = [
   {
     path: '/getquote',
     route: getQuoteRoute,
+  },
+  {
+    path: '/hangtag',
+    route: hangtagRoute,
   },
 ];
 
