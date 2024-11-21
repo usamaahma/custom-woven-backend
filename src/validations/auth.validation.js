@@ -6,10 +6,18 @@ const register = {
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
     name: Joi.string().required(),
+    phonenumber: Joi.string().required(),
     role: Joi.string().required(),
   }),
 };
-
+const registerGoogle = {
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    name: Joi.string().required(),
+    googleId: Joi.string().required(), // Unique Google ID from Google OAuth
+    role: Joi.string().optional().default('user'), // Default to 'user' if not provided
+  }),
+};
 const login = {
   body: Joi.object().keys({
     email: Joi.string().required(),
@@ -58,4 +66,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   verifyEmail,
+  registerGoogle,
 };

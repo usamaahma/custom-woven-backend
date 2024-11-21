@@ -6,7 +6,14 @@ const sizeSchema = Joi.object({
   _id: Joi.string().custom(objectId).optional(),
   name: Joi.string().required(),
   image: Joi.string().uri().optional(),
-  price: Joi.number().required(),
+  quantityPrice: Joi.array()
+    .items(
+      Joi.object({
+        quantity: Joi.number().required(), // Validate that quantity is a number and required
+        price: Joi.number().required(), // Validate that price is a number and required
+      })
+    )
+    .required(),
 });
 
 // Schema for a style within a description
@@ -21,9 +28,15 @@ const styleSchema = Joi.object({
 // Schema for an option (used for all types of options)
 const optionSchema = Joi.object({
   _id: Joi.string().custom(objectId).optional(),
-  type: Joi.string().required(),
-  title: Joi.string().required(),
-  image: Joi.string().uri().optional(),
+  type: Joi.string().required(), // e.g., "versions", "proofOptions", etc.
+  cards: Joi.array()
+    .items(
+      Joi.object({
+        title: Joi.string().required(), // Title for each card
+        image: Joi.string().uri().optional(), // Image URL for each card
+      })
+    )
+    .required(), // Ensure at least one card is provided
 });
 
 // Schema for a description with styles and options

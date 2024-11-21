@@ -36,7 +36,7 @@ const descriptionSchema = new mongoose.Schema({
   comments: { type: String },
 });
 
-const productSchema = new mongoose.Schema(
+const hangtagSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
     image: { type: String, required: true },
@@ -48,12 +48,12 @@ const productSchema = new mongoose.Schema(
 );
 
 // Plugins for JSON conversion and pagination
-productSchema.plugin(toJSON);
-productSchema.plugin(paginate);
+hangtagSchema.plugin(toJSON);
+hangtagSchema.plugin(paginate);
 
 /**
- * @typedef Product
+ * @typedef Hangtag
  */
-const Product = mongoose.model('Product', productSchema);
+const Hangtag = mongoose.model('Hangtag', hangtagSchema);
 
-module.exports = Product;
+module.exports = Hangtag;

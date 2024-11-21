@@ -11,6 +11,11 @@ const userSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    phonenumber: {
+      type: String, // Changed from Number to String
+      required: true,
+      trim: true, // This works with String type
+    },
     email: {
       type: String,
       required: true,
