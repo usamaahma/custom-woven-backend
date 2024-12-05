@@ -1,141 +1,104 @@
 const Joi = require('joi');
-const { objectId } = require('./custom.validation'); // Assuming objectId validation is available
+const { objectId } = require('./custom.validation');
 
-// Validation schema for creating a request quote
-const createRequestQuote = {
+// Schema for size within a style
+const sizeSchema = Joi.object({
+  _id: Joi.string().custom(objectId).optional(),
+  name: Joi.string().required(),
+  image: Joi.string().uri().optional(),
+  quantityPrice: Joi.array()
+    .items(
+      Joi.object({
+        quantity: Joi.number().required(), // Validate that quantity is a number and required
+        price: Joi.number().required(), // Validate that price is a number and required
+      })
+    )
+    .required(),
+});
+
+// Schema for a style within a description
+const styleSchema = Joi.object({
+  _id: Joi.string().custom(objectId).optional(),
+  name: Joi.string().required(),
+  image: Joi.string().uri().optional(),
+  sizes: Joi.array().items(sizeSchema).required(),
+  basePrice: Joi.number().required(),
+});
+
+// Schema for an option (used for all types of options)
+const optionSchema = Joi.object({
+  _id: Joi.string().custom(objectId).optional(),
+  type: Joi.string().required(), // e.g., "versions", "proofOptions", etc.
+  cards: Joi.array()
+    .items(
+      Joi.object({
+        title: Joi.string().required(), // Title for each card
+        image: Joi.string().uri().optional(), // Image URL for each card
+      })
+    )
+    .required(), // Ensure at least one card is provided
+});
+
+// Schema for a description with styles and options
+const descriptionSchema = Joi.object({
+  descriptionTitle: Joi.string().optional(),
+  text: Joi.string().optional(),
+  images: Joi.array().items(Joi.string().uri()).required(),
+  styles: Joi.array().items(styleSchema).required(),
+  options: Joi.array().items(optionSchema).optional(), // Unified options array
+  comments: Joi.string().optional(), // Optional comments field
+});
+
+// Validation schema for creating a product
+const createProduct = {
   body: Joi.object().keys({
-    image: Joi.string().uri().required().messages({
-      'string.uri': 'Image must be a valid URL.',
-      'any.required': 'Image is required.',
-    }),
-    name: Joi.string().trim().required().messages({
-      'any.required': 'Name is required.',
-    }),
-    email: Joi.string().email().required().messages({
-      'string.email': 'Email must be valid.',
-      'any.required': 'Email is required.',
-    }),
-    phoneNumber: Joi.string()
-      .pattern(/^\+?[0-9\s-]+$/)
-      .required()
-      .messages({
-        'string.pattern.base': 'Phone number is not valid.',
-        'any.required': 'Phone number is required.',
-      }),
-    width: Joi.number().min(1).required().messages({
-      'number.min': 'Width must be at least 1.',
-      'any.required': 'Width is required.',
-    }),
-    height: Joi.number().min(1).required().messages({
-      'number.min': 'Height must be at least 1.',
-      'any.required': 'Height is required.',
-    }),
-    paperWeight: Joi.string().valid('80gsm', '120gsm', '160gsm').required().messages({
-      'any.only': 'Paper weight must be 80gsm, 120gsm, or 160gsm.',
-      'any.required': 'Paper weight is required.',
-    }),
-    paperFinish: Joi.string().valid('Glossy', 'Matte', 'Textured').required().messages({
-      'any.only': 'Paper finish must be Glossy, Matte, or Textured.',
-      'any.required': 'Paper finish is required.',
-    }),
-    printOption: Joi.string().valid('Full Color', 'Black & White').required().messages({
-      'any.only': 'Print option must be Full Color or Black & White.',
-      'any.required': 'Print option is required.',
-    }),
-    holePunchPosition: Joi.string().valid('Top Center', 'Left Side', 'Right Side').required().messages({
-      'any.only': 'Hole punch position must be Top Center, Left Side, or Right Side.',
-      'any.required': 'Hole punch position is required.',
-    }),
-    embossOrDeboss: Joi.string().valid('Emboss', 'Deboss').required().messages({
-      'any.only': 'Value must be Emboss or Deboss.',
-      'any.required': 'This field is required.',
-    }),
-    roundCorner: Joi.boolean().required(),
-    uvSpotGloss: Joi.boolean().required(),
-    metallicFoilColor: Joi.string().trim().required(),
-    stringColor: Joi.string().trim().required(),
-    safetyColor: Joi.string().trim().required(),
-    holeGrommet: Joi.boolean().required(),
-    proofOptions: Joi.string().valid('Digital', 'Physical', 'None').required().messages({
-      'any.only': 'Proof option must be Digital, Physical, or None.',
-      'any.required': 'Proof option is required.',
-    }),
-    quantity: Joi.number().min(1).required().messages({
-      'number.min': 'Quantity must be at least 1.',
-      'any.required': 'Quantity is required.',
-    }),
-    comments: Joi.string().trim().optional(),
+    title: Joi.string().required(),
+    image: Joi.string().uri().required(),
+    descriptions: Joi.array().items(descriptionSchema).required(),
   }),
 };
 
-// Validation schema for getting a request quote by ID
-const getRequestQuote = {
-  params: Joi.object().keys({
-    requestQuoteId: Joi.string().custom(objectId).required(),
-  }),
-};
-
-const getRequestQuotes = {
+// Validation schema for getting multiple products with pagination
+const getProducts = {
   query: Joi.object().keys({
-    sortBy: Joi.string()
-      .valid('name', 'email', 'createdAt', 'updatedAt') // Allow sorting by specific fields
-      .optional()
-      .messages({
-        'any.only': 'Sort by must be name, email, createdAt, or updatedAt.',
-      }),
-    limit: Joi.number().integer().min(1).optional().messages({
-      'number.base': 'Limit must be a number.',
-      'number.min': 'Limit must be at least 1.',
-    }),
-    page: Joi.number().integer().min(1).optional().messages({
-      'number.base': 'Page must be a number.',
-      'number.min': 'Page must be at least 1.',
-    }),
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
   }),
 };
 
-// Validation schema for updating a request quote
-const updateRequestQuote = {
+// Validation schema for getting a single product by ID
+const getProduct = {
   params: Joi.object().keys({
-    requestQuoteId: Joi.string().custom(objectId).required(),
+    productId: Joi.string().custom(objectId).required(),
+  }),
+};
+
+// Validation schema for updating a product
+const updateProduct = {
+  params: Joi.object().keys({
+    productId: Joi.string().custom(objectId).required(),
   }),
   body: Joi.object()
     .keys({
+      title: Joi.string(),
       image: Joi.string().uri(),
-      name: Joi.string().trim(),
-      email: Joi.string().email(),
-      phoneNumber: Joi.string().pattern(/^\+?[0-9\s-]+$/), // Fixed: Removed unnecessary escape character for '-'
-      width: Joi.number().min(1),
-      height: Joi.number().min(1),
-      paperWeight: Joi.string().valid('80gsm', '120gsm', '160gsm'),
-      paperFinish: Joi.string().valid('Glossy', 'Matte', 'Textured'),
-      printOption: Joi.string().valid('Full Color', 'Black & White'),
-      holePunchPosition: Joi.string().valid('Top Center', 'Left Side', 'Right Side'),
-      embossOrDeboss: Joi.string().valid('Emboss', 'Deboss'),
-      roundCorner: Joi.boolean(),
-      uvSpotGloss: Joi.boolean(),
-      metallicFoilColor: Joi.string().trim(),
-      stringColor: Joi.string().trim(),
-      safetyColor: Joi.string().trim(),
-      holeGrommet: Joi.boolean(),
-      proofOptions: Joi.string().valid('Digital', 'Physical', 'None'),
-      quantity: Joi.number().min(1),
-      comments: Joi.string().trim(),
+      descriptions: Joi.array().items(descriptionSchema),
     })
-    .min(1), // Ensure at least one field is being updated
+    .min(1), // Ensures at least one field is being updated
 };
 
-// Validation schema for deleting a request quote
-const deleteRequestQuote = {
+// Validation schema for deleting a product
+const deleteProduct = {
   params: Joi.object().keys({
-    requestQuoteId: Joi.string().custom(objectId).required(),
+    productId: Joi.string().custom(objectId).required(),
   }),
 };
 
 module.exports = {
-  createRequestQuote,
-  getRequestQuotes,
-  getRequestQuote,
-  updateRequestQuote,
-  deleteRequestQuote,
+  createProduct,
+  getProducts,
+  getProduct,
+  updateProduct,
+  deleteProduct,
 };
