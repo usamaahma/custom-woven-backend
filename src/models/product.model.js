@@ -16,7 +16,7 @@ const styleSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true }, // Style name, e.g., "Casual", "Formal"
   image: { type: String },
   sizes: [sizeSchema], // Array of sizes with prices for each style
-  basePrice: { type: Number, required: true }, // Base price for the style
+  // basePrice: { type: Number, required: true }, // Base price for the style
 });
 const optionsSchema = new mongoose.Schema({
   type: { type: String, required: true }, // e.g., "versions", "proofOptions", etc.
