@@ -6,19 +6,30 @@ const GetQuote = require('../models/getQuote.model');
  * @returns {Promise<GetQuote>}
  */
 const createQuote = async (quoteBody) => {
-  const newQuote = await GetQuote.create(quoteBody);
-  return newQuote;
+  try {
+    const newQuote = await GetQuote.create(quoteBody);
+    return newQuote;
+  } catch (error) {
+    throw new Error(`Error creating quote: ${error.message}`);
+  }
 };
 
 /**
- * Get all quotes with optional filters
- * @param {Object} filter - Filters for retrieving quotes
- * @param {Object} options - Pagination options, sort, etc.
+ * Get all quotes with optional filters and pagination
+ * @param {Object} filter - Filters for retrieving quotes (optional)
+ * @param {Object} options - Pagination options (limit, skip, sort, etc.)
  * @returns {Promise<Array<GetQuote>>}
  */
 const getQuotes = async (filter = {}, options = {}) => {
-  const quotes = await GetQuote.find(filter).sort(options.sort).limit(options.limit);
-  return quotes;
+  try {
+    const quotes = await GetQuote.find(filter)
+      .sort(options.sort || {})
+      .skip(options.skip || 0) // for pagination (skip items)
+      .limit(options.limit || 10); // for pagination (limit items per page)
+    return quotes;
+  } catch (error) {
+    throw new Error(`Error fetching quotes: ${error.message}`);
+  }
 };
 
 /**
@@ -27,8 +38,13 @@ const getQuotes = async (filter = {}, options = {}) => {
  * @returns {Promise<GetQuote>}
  */
 const getQuoteById = async (id) => {
-  const quote = await GetQuote.findById(id);
-  return quote;
+  try {
+    const quote = await GetQuote.findById(id);
+    if (!quote) throw new Error('Quote not found');
+    return quote;
+  } catch (error) {
+    throw new Error(`Error fetching quote: ${error.message}`);
+  }
 };
 
 /**
@@ -38,8 +54,13 @@ const getQuoteById = async (id) => {
  * @returns {Promise<GetQuote>}
  */
 const updateQuoteById = async (id, updateBody) => {
-  const quote = await GetQuote.findByIdAndUpdate(id, updateBody, { new: true });
-  return quote;
+  try {
+    const quote = await GetQuote.findByIdAndUpdate(id, updateBody, { new: true });
+    if (!quote) throw new Error('Quote not found for updating');
+    return quote;
+  } catch (error) {
+    throw new Error(`Error updating quote: ${error.message}`);
+  }
 };
 
 /**
@@ -48,8 +69,13 @@ const updateQuoteById = async (id, updateBody) => {
  * @returns {Promise<GetQuote>}
  */
 const deleteQuoteById = async (id) => {
-  const deletedQuote = await GetQuote.findByIdAndDelete(id);
-  return deletedQuote;
+  try {
+    const deletedQuote = await GetQuote.findByIdAndDelete(id);
+    if (!deletedQuote) throw new Error('Quote not found for deletion');
+    return deletedQuote;
+  } catch (error) {
+    throw new Error(`Error deleting quote: ${error.message}`);
+  }
 };
 
 module.exports = {
