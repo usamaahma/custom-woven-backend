@@ -6,6 +6,8 @@ const orderDescriptionRoute = require('./orderDescription.route');
 const getQuoteRoute = require('./getQuote.route');
 const hangtagRoute = require('./hangtag.route');
 const docsRoute = require('./docs.route');
+const blogsRoute = require('./blogs.route'); // <-- Corrected import for blogs route
+const requestquoteRoute = require('./requestquote.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -34,6 +36,14 @@ const defaultRoutes = [
   {
     path: '/hangtag',
     route: hangtagRoute,
+  },
+  {
+    path: '/blogs', // Add blogs route here
+    route: blogsRoute, // Ensure the `blogsRoute` is imported above
+  },
+  {
+    path: '/requestquote',
+    route: requestquoteRoute,
   },
 ];
 

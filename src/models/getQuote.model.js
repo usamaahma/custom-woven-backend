@@ -45,8 +45,9 @@ const GetQuoteSchema = mongoose.Schema(
   }
 );
 
-// add plugin that converts mongoose to json
+// Add plugin that converts mongoose to JSON
 GetQuoteSchema.plugin(toJSON);
+
 /**
  * @typedef Products
  */

@@ -5,4 +5,6 @@ module.exports.userService = require('./user.service');
 module.exports.productService = require('./product.service');
 module.exports.productDescriptionService = require('./orderDescription.service');
 module.exports.getQuoteService = require('./getQuote.service');
-module.exports.hangtag = require('./hangtag.service');
+module.exports.hangtagService = require('./hangtag.service');
+module.exports.blogService = require('./blogs.service');
+module.exports.requestQuoteService = require('./requestquote.service');
