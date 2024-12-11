@@ -8,3 +8,4 @@ module.exports.getQuoteService = require('./getQuote.service');
 module.exports.hangtagService = require('./hangtag.service');
 module.exports.blogService = require('./blogs.service');
 module.exports.requestQuoteService = require('./requestquote.service');
+module.exports.pendingCheckoutService = require('./pendingCheckout.service');
