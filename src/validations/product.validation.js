@@ -22,7 +22,6 @@ const styleSchema = Joi.object({
   name: Joi.string().required(),
   image: Joi.string().uri().optional(),
   sizes: Joi.array().items(sizeSchema).required(),
-  basePrice: Joi.number().optional(),
 });
 
 // Schema for an option (used for all types of options)

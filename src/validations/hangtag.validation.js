@@ -14,7 +14,6 @@ const createHangtag = {
           Joi.object().keys({
             name: Joi.string().required(),
             image: Joi.string().uri().optional(),
-            basePrice: Joi.number().required(),
             sizes: Joi.array().items(
               Joi.object().keys({
                 name: Joi.string().required(),

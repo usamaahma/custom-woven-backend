@@ -5,4 +5,4 @@ module.exports.orderDescriptionController = require('./orderDescription.controll
 module.exports.getQuoteController = require('./getQuote.controller');
 module.exports.blogController = require('./blogs.controller');
 module.exports.requestquoteController = require('./requestquote.controller');
-module.exports.requestquoteController = require('./requestquote.controller');
+module.exports.designQuoteController = require('./designQuote.controller');
