@@ -4,7 +4,6 @@ const { toJSON } = require('./plugins'); // Custom plugin to convert mongoose do
 // Define options schema
 const optionsSchema = new mongoose.Schema({
   title: { type: String, required: true }, // Title for each card (required)
-  value: { type: String, required: true }, // Image URL or value (required)
 });
 
 // Define the main PendingCheckout schema

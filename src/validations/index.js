@@ -7,3 +7,4 @@ module.exports.hangtagValidation = require('./hangtag.validation');
 module.exports.blogValidation = require('./blogs.validation');
 module.exports.requestQuoteValidation = require('./requestquote.validation');
 module.exports.pendingCheckoutValidation = require('./pendingCheckout.validation');
+module.exports.checkoutValidation = require('./checkout.validation');

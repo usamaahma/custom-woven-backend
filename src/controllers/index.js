@@ -7,3 +7,4 @@ module.exports.blogController = require('./blogs.controller');
 module.exports.requestquoteController = require('./requestquote.controller');
 module.exports.requestquoteController = require('./requestquote.controller');
 module.exports.pendingCheckoutController = require('./pendingCheckout.controller');
+module.exports.checkoutController = require('./checkout.controller');

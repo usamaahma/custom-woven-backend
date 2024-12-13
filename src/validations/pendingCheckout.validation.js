@@ -4,7 +4,6 @@ const { objectId } = require('./custom.validation');
 // Validation for Options Schema
 const optionsSchema = Joi.object({
   title: Joi.string().required(), // Title for each option card
-  value: Joi.string().required(), // Value or image URL for the option
 });
 const optionsArraySchema = Joi.array().items(optionsSchema).required(); // Ensure this array is required
 
