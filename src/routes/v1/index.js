@@ -9,6 +9,7 @@ const docsRoute = require('./docs.route');
 const blogsRoute = require('./blogs.route'); // <-- Corrected import for blogs route
 const requestquoteRoute = require('./requestquote.route');
 const pendingCheckoutRoute = require('./pendingCheckout.route');
+const designQuoteRoute = require('./designQuote.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -49,6 +50,10 @@ const defaultRoutes = [
   {
     path: '/pendingcheckout',
     route: pendingCheckoutRoute,
+  },
+  {
+    path: '/designQuote',
+    route: designQuoteRoute,
   },
 ];
 

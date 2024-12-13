@@ -8,3 +8,4 @@ module.exports.Blog = require('./blogs.model');
 module.exports.RequestQuote = require('./requestquote.model');
 module.exports.PendingCheckout = require('./pendingCheckout.model');
 module.exports.Checkout = require('./checkout.model');
+module.exports.DesignQuote = require('./designQuote.model');
