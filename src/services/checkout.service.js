@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Checkout } = require('../models/checkout.model'); // Import the Checkout model
+const Checkout = require('../models/checkout.model'); // Import the Checkout model
 const ApiError = require('../utils/ApiError');
 
 /**
