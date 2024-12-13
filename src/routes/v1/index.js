@@ -10,6 +10,7 @@ const blogsRoute = require('./blogs.route'); // <-- Corrected import for blogs r
 const requestquoteRoute = require('./requestquote.route');
 const pendingCheckoutRoute = require('./pendingCheckout.route');
 const designQuoteRoute = require('./designQuote.route');
+const checkoutRoute = require('./checkout.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -54,6 +55,10 @@ const defaultRoutes = [
   {
     path: '/designQuote',
     route: designQuoteRoute,
+  },
+  {
+    path: '/checkout',
+    route: checkoutRoute,
   },
 ];
 

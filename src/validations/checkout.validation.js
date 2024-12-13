@@ -30,8 +30,8 @@ const checkoutProductSchema = Joi.object({
   artworkFile: Joi.string().uri().required(),
   size: Joi.string().required(),
   style: Joi.string().required(),
-  options: Joi.array().items(Joi.string()).allow(null, []), // Optional array of options
-  comments: Joi.string().allow(null, ''), // Optional comments
+  options: Joi.array().items(Joi.string()).allow(null), // Optional array of options
+  comments: Joi.string().allow(null), // Optional comments
   quantity: quantitySchema.required(),
   totalPrice: Joi.number().positive().required(),
   qty: Joi.number().integer().min(1).required(),
@@ -42,8 +42,8 @@ const paymentSchema = Joi.object({
   method: Joi.string().valid('PayPal').required(),
   totalAmount: Joi.number().positive().required(),
   currency: Joi.string().default('USD'),
-  transactionId: Joi.string().allow(null, ''),
-  payerEmail: Joi.string().email().allow(null, ''),
+  transactionId: Joi.string().allow(null),
+  payerEmail: Joi.string().email().allow(null),
   status: Joi.string().valid('Pending', 'Completed', 'Failed').default('Pending'),
 });
 
