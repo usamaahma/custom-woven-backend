@@ -15,14 +15,14 @@ const createCheckout = async (checkoutBody) => {
 /**
  * Query checkouts with filters and pagination
  * @param {Object} filter - MongoDB filter object
- * @param {Object} options - Query options (limit, sort, page)
- * @returns {Promise<QueryResult>}
+ * @param {Object} options - Query options (limit, skip, sort)
+ * @returns {Promise<Checkout[]>}
  */
-const queryCheckouts = async (filter, options) => {
-  const checkouts = await Checkout.paginate(filter, options);
+
+const queryCheckouts = async () => {
+  const checkouts = await Checkout.find({});
   return checkouts;
 };
-
 /**
  * Get a checkout by ID
  * @param {ObjectId} id - Checkout ID

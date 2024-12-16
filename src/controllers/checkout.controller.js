@@ -1,4 +1,3 @@
-// Import services and validation
 const httpStatus = require('http-status');
 const checkoutService = require('../services/checkout.service');
 const catchAsync = require('../utils/catchAsync');
@@ -13,7 +12,7 @@ const createCheckout = catchAsync(async (req, res) => {
 // Get all Checkouts
 const getCheckouts = catchAsync(async (req, res) => {
   const { page, limit, sortBy, ...filterOptions } = req.query;
-  const checkouts = await checkoutService.getCheckouts({ page, limit, sortBy, filterOptions });
+  const checkouts = await checkoutService.queryCheckouts({ page, limit, sortBy, filterOptions });
   res.status(httpStatus.OK).send({ success: true, data: checkouts });
 });
 
@@ -28,7 +27,7 @@ const getCheckoutById = catchAsync(async (req, res) => {
 
 // Update a Checkout by ID
 const updateCheckout = catchAsync(async (req, res) => {
-  const checkout = await checkoutService.updateCheckout(req.params.id, req.body);
+  const checkout = await checkoutService.updateCheckoutById(req.params.id, req.body);
   if (!checkout) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Checkout not found');
   }
@@ -37,7 +36,7 @@ const updateCheckout = catchAsync(async (req, res) => {
 
 // Delete a Checkout by ID
 const deleteCheckout = catchAsync(async (req, res) => {
-  const checkout = await checkoutService.deleteCheckout(req.params.id);
+  const checkout = await checkoutService.deleteCheckoutById(req.params.id);
   if (!checkout) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Checkout not found');
   }
