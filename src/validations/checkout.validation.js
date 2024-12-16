@@ -18,11 +18,6 @@ const addressSchema = Joi.object({
 });
 
 // Quantity Validation Schema
-const quantitySchema = Joi.object({
-  quantity: Joi.number().integer().min(1).required(),
-  unitPrice: Joi.number().positive().required(),
-  total: Joi.number().positive().required(),
-});
 
 // Checkout Product Validation Schema
 const checkoutProductSchema = Joi.object({
@@ -32,7 +27,7 @@ const checkoutProductSchema = Joi.object({
   style: Joi.string().required(),
   options: Joi.array().items(Joi.string()).allow(null), // Optional array of options
   comments: Joi.string().allow(null), // Optional comments
-  quantity: quantitySchema.required(),
+  quantity: Joi.number().positive().required(),
   totalPrice: Joi.number().positive().required(),
   qty: Joi.number().integer().min(1).required(),
 });

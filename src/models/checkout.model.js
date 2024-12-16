@@ -74,20 +74,6 @@ const addressSchema = new mongoose.Schema({
 });
 
 // Quantity Schema
-const quantitySchema = new mongoose.Schema({
-  quantity: {
-    type: String,
-    required: true,
-  },
-  unitPrice: {
-    type: String,
-    required: true,
-  },
-  total: {
-    type: String,
-    required: true,
-  },
-});
 
 // Checkout Product Schema
 const checkoutProductSchema = new mongoose.Schema({
@@ -116,7 +102,7 @@ const checkoutProductSchema = new mongoose.Schema({
     required: false,
   },
   quantity: {
-    type: quantitySchema,
+    type: Number,
     required: true,
   },
   totalPrice: {
