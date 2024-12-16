@@ -36,12 +36,18 @@ const descriptionSchema = new mongoose.Schema({
   options: [optionsSchema], // Unified array to hold all dynamic options
   comments: { type: String },
 });
+const productDescription = new mongoose.Schema({
+  title: { type: String, trim: true },
+  image: { type: String },
+  descriptions: { type: String },
+});
 
 const productSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
     image: { type: String, required: true },
     descriptions: [descriptionSchema], // Array of descriptions with styles and other options
+    productDescription: [productDescription],
   },
   {
     timestamps: true,

@@ -1,6 +1,12 @@
 const Joi = require('joi');
 const { objectId } = require('./custom.validation');
 
+const hangtagDescriptionSchema = Joi.object({
+  title: Joi.string().optional(),
+  image: Joi.string().optional(),
+  description: Joi.string().optional(),
+});
+
 const createHangtag = {
   body: Joi.object().keys({
     title: Joi.string().required(),
@@ -42,6 +48,7 @@ const createHangtag = {
         comments: Joi.string().optional(),
       })
     ),
+    hangtagDescription: Joi.array().items(hangtagDescriptionSchema).required(),
   }),
 };
 
@@ -53,6 +60,7 @@ const updateHangtag = {
     title: Joi.string().optional(),
     image: Joi.string().uri().optional(),
     descriptions: Joi.array().optional(),
+    hangtagDescription: Joi.array().items(hangtagDescriptionSchema).optional(),
   }),
 };
 

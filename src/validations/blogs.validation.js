@@ -11,6 +11,7 @@ const createBlogSchema = Joi.object({
       Joi.object({
         descriptionTitle: Joi.string().required(),
         text: Joi.string().required(),
+        image: Joi.string().optional(),
       })
     )
     .optional(),
