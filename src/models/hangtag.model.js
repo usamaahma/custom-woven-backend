@@ -36,18 +36,17 @@ const descriptionSchema = new mongoose.Schema({
   options: [optionsSchema], // Unified array to hold all dynamic options
   comments: { type: String },
 });
-const productDescription = new mongoose.Schema({
-  title: { type: String, trim: true },
-  image: { type: String },
-  descriptions: { type: String },
+const hangtagDescription = new mongoose.Schema({
+  title: { type: String, required: true, trim: true },
+  image: { type: String, required: true },
+  descriptions: { type: String, required: true },
 });
-
-const productSchema = new mongoose.Schema(
+const hangtagSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
     image: { type: String, required: true },
-    descriptions: [descriptionSchema], // Array of descriptions with styles and other options
-    productDescription: [productDescription],
+    descriptions: [descriptionSchema],
+    hangtagDescription: [hangtagDescription], // Array of descriptions with styles and other options
   },
   {
     timestamps: true,
@@ -55,12 +54,12 @@ const productSchema = new mongoose.Schema(
 );
 
 // Plugins for JSON conversion and pagination
-productSchema.plugin(toJSON);
-productSchema.plugin(paginate);
+hangtagSchema.plugin(toJSON);
+hangtagSchema.plugin(paginate);
 
 /**
- * @typedef Product
+ * @typedef Hangtag
  */
-const Product = mongoose.model('Product', productSchema);
+const Hangtag = mongoose.model('Hangtag', hangtagSchema);
 
-module.exports = Product;
+module.exports = Hangtag;
