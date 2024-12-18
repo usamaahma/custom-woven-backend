@@ -36,12 +36,17 @@ const descriptionSchema = new mongoose.Schema({
   options: [optionsSchema], // Unified array to hold all dynamic options
   comments: { type: String },
 });
-
+const hangtagDescription = new mongoose.Schema({
+  title: { type: String, required: true, trim: true },
+  image: { type: String, required: true },
+  descriptions: { type: String, required: true },
+});
 const hangtagSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
     image: { type: String, required: true },
-    descriptions: [descriptionSchema], // Array of descriptions with styles and other options
+    descriptions: [descriptionSchema],
+    hangtagDescription: [hangtagDescription], // Array of descriptions with styles and other options
   },
   {
     timestamps: true,

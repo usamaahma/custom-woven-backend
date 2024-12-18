@@ -11,6 +11,9 @@ const titledescriptionsSchema = new mongoose.Schema({
     type: String,
     required: true, // Ensure that text is required
   },
+  image: {
+    type: String,
+  },
 });
 
 // Define Blog Schema
