@@ -4,7 +4,7 @@ const { objectId } = require('./custom.validation');
 const hangtagDescriptionSchema = Joi.object({
   title: Joi.string().optional(),
   image: Joi.string().optional(),
-  description: Joi.string().optional(),
+  descriptions: Joi.string().optional(),
 });
 
 const createHangtag = {
