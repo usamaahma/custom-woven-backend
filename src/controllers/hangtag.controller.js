@@ -29,6 +29,7 @@ const getHangtag = catchAsync(async (req, res) => {
     res.status(httpStatus.NOT_FOUND).send({ message: 'Hangtag not found' });
   }
   res.send(hangtag);
+  res.send({ ...hangtag, hangtagDescription: hangtag.hangtagDescription || [] });
 });
 
 /**
