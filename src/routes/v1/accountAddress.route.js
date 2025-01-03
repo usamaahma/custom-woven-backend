@@ -13,14 +13,18 @@ router
 
 router
   .route('/:addressId')
-  .get(auth('getUsers'), validate(accountAddressValidation.getAccountAddress), accountAddressController.getAccountAddress)
+  .get(
+    auth('getAccountAddress'),
+    validate(accountAddressValidation.getAccountAddress),
+    accountAddressController.getAccountAddress
+  )
   .patch(
-    auth('manageUsers'),
+    auth('manageAccountAddress'),
     validate(accountAddressValidation.updateAccountAddress),
     accountAddressController.updateAccountAddress
   )
   .delete(
-    auth('manageUsers'),
+    auth('manageAccountAddress'),
     validate(accountAddressValidation.deleteAccountAddress),
     accountAddressController.deleteAccountAddress
   );
