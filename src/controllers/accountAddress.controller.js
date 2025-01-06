@@ -1,34 +1,72 @@
-const httpStatus = require('http-status');
-const ApiError = require('../utils/ApiError');
-const catchAsync = require('../utils/catchAsync');
-const { accountAddressService } = require('../services');
+const { AccountAddress } = require('../models');
+const AccountAddressService = require('../services/accountAddress.service'); // Import the service
 
-const createAccountAddress = catchAsync(async (req, res) => {
-  const accountAddress = await accountAddressService.createAccountAddress(req.body);
-  res.status(httpStatus.CREATED).send(accountAddress);
-});
-
-const getAccountAddressById = catchAsync(async (req, res) => {
-  const accountAddress = await accountAddressService.getAccountAddressesByUserId(req.params.addressId);
-  if (!accountAddress) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Account address not found');
+// Controller to create an account address
+const createAccountAddress = async (req, res) => {
+  try {
+    const { userId, shippingAddress, billingAddress } = req.body;
+    const newAddress = await AccountAddressService.createAccountAddress({ userId, shippingAddress, billingAddress });
+    res.status(201).json(newAddress);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
-  res.send(accountAddress);
-});
+};
 
-const updateAccountAddressById = catchAsync(async (req, res) => {
-  const accountAddress = await accountAddressService.updateAccountAddressById(req.params.addressId, req.body);
-  res.send(accountAddress);
-});
+// Controller to get all account addresses for a user
+const getAccountAddresses = async (req, res) => {
+  try {
+    const { userId } = req.query; // Optional filtering by userId
+    const filter = userId ? { userId } : {}; // Apply filter if userId exists
+    const total = await AccountAddress.countDocuments(filter); // Count total documents
+    const addresses = await AccountAddress.find(filter).lean(); // Fetch all addresses
 
-const deleteAccountAddressById = catchAsync(async (req, res) => {
-  await accountAddressService.deleteAccountAddressById(req.params.addressId);
-  res.status(httpStatus.NO_CONTENT).send();
-});
+    res.status(200).send({
+      total, // Total count of addresses
+      addresses, // List of all addresses
+    });
+  } catch (error) {
+    res.status(500).send({ message: 'Internal server error' });
+  }
+};
+
+// Controller to get a specific account address
+const getAccountAddress = async (req, res) => {
+  try {
+    const { addressId } = req.params;
+    const address = await AccountAddressService.getAccountAddress(addressId);
+    res.status(200).json(address);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+// Controller to update an account address
+const updateAccountAddress = async (req, res) => {
+  try {
+    const { addressId } = req.params;
+    const updatedData = req.body;
+    const updatedAddress = await AccountAddressService.updateAccountAddress(addressId, updatedData);
+    res.status(200).json(updatedAddress);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+// Controller to delete an account address
+const deleteAccountAddress = async (req, res) => {
+  try {
+    const { addressId } = req.params;
+    await AccountAddressService.deleteAccountAddress(addressId);
+    res.status(204).json(); // No Content
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
 
 module.exports = {
   createAccountAddress,
-  getAccountAddressById,
-  updateAccountAddressById,
-  deleteAccountAddressById,
+  getAccountAddresses,
+  getAccountAddress,
+  updateAccountAddress,
+  deleteAccountAddress,
 };
