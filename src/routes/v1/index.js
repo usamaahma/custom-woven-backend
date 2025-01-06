@@ -12,6 +12,7 @@ const pendingCheckoutRoute = require('./pendingCheckout.route');
 const designQuoteRoute = require('./designQuote.route');
 const checkoutRoute = require('./checkout.route');
 const accountAddress = require('./accountAddress.route');
+const NewsLetter = require('./newsletter.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -64,6 +65,10 @@ const defaultRoutes = [
   {
     path: '/accountaddress',
     route: accountAddress,
+  },
+  {
+    path: '/newsletter',
+    route: NewsLetter,
   },
 ];
 

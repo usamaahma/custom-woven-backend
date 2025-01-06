@@ -12,3 +12,4 @@ module.exports.pendingCheckoutService = require('./pendingCheckout.service');
 module.exports.checkoutService = require('./checkout.service');
 module.exports.designQuoteService = require('./designQuote.service');
 module.exports.accountAddressService = require('./accountAddress.service');
+module.exports.NewsLetterService = require('./newsletter.service');
