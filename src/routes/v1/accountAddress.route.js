@@ -9,24 +9,19 @@ const router = express.Router();
 router
   .route('/')
   .post(validate(accountAddressValidation.createAccountAddress), accountAddressController.createAccountAddress)
-  .get(validate(accountAddressValidation.getAccountAddresses), accountAddressController.getAccountAddresses);
+  .get(validate(accountAddressValidation.getAccountAddressByUserId), accountAddressController.getAccountAddressById);
 
 router
   .route('/:addressId')
-  .get(
-    auth('getAccountAddress'),
-    validate(accountAddressValidation.getAccountAddress),
-    accountAddressController.getAccountAddress
-  )
   .patch(
     auth('manageAccountAddress'),
     validate(accountAddressValidation.updateAccountAddress),
-    accountAddressController.updateAccountAddress
+    accountAddressController.updateAccountAddressById
   )
   .delete(
     auth('manageAccountAddress'),
     validate(accountAddressValidation.deleteAccountAddress),
-    accountAddressController.deleteAccountAddress
+    accountAddressController.deleteAccountAddressById
   );
 
 module.exports = router;

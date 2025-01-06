@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Reusable address schema
+// Address Schema
 const addressSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -44,7 +44,7 @@ const addressSchema = new mongoose.Schema({
   },
 });
 
-// Main schema for account addresses
+// Main Account Address Schema
 const accountAddressSchema = new mongoose.Schema(
   {
     userId: {
@@ -62,8 +62,11 @@ const accountAddressSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt
+    timestamps: true, // Automatically adds createdAt and updatedAt
   }
 );
 
-module.exports = mongoose.model('AccountAddress', accountAddressSchema);
+// Create the AccountAddress model
+const AccountAddress = mongoose.model('AccountAddress', accountAddressSchema);
+
+module.exports.AccountAddress = AccountAddress;
