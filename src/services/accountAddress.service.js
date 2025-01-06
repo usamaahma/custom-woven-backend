@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { AccountAddress } = require('../models');
+const AccountAddress = require('../models/accountAddress.model'); // Correct model path
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -8,9 +8,14 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<AccountAddress>}
  */
 const createAccountAddress = async (addressBody) => {
-  return AccountAddress.create(addressBody);
+  try {
+    const accountAddress = new AccountAddress(addressBody);
+    await accountAddress.save();
+    return accountAddress;
+  } catch (error) {
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, `Error creating address: ${error.message}`);
+  }
 };
-
 /**
  * Query for account addresses by userId
  * @param {ObjectId} userId
@@ -18,9 +23,6 @@ const createAccountAddress = async (addressBody) => {
  */
 const getAccountAddressesByUserId = async (userId) => {
   const addresses = await AccountAddress.find({ userId });
-  if (!addresses || addresses.length === 0) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'No addresses found for this user');
-  }
   return addresses;
 };
 
