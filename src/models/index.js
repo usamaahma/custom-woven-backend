@@ -10,3 +10,4 @@ module.exports.PendingCheckout = require('./pendingCheckout.model');
 module.exports.Checkout = require('./checkout.model');
 module.exports.DesignQuote = require('./designQuote.model');
 module.exports.AccountAddress = require('./accountAddress.model');
+module.exports.NewsLetter = require('./newsletter.model');
