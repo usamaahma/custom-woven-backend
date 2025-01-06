@@ -1,22 +1,21 @@
 const Joi = require('joi');
 const { objectId } = require('./custom.validation');
 
-// Schema for size within a style
-const sizeSchema = Joi.object({
-  _id: Joi.string().custom(objectId).optional(),
-  name: Joi.string().required(),
-  image: Joi.string().uri().optional(),
-  quantityPrice: Joi.array()
-    .items(
-      Joi.object({
-        quantity: Joi.number().required(), // Validate that quantity is a number and required
-        price: Joi.number().required(), // Validate that price is a number and required
-      })
-    )
-    .required(),
+// Schema for quantityPrice within a size
+const quantityPriceSchema = Joi.object({
+  quantity: Joi.number().required(),
+  price: Joi.number().required(),
 });
 
-// Schema for a style within a description
+// Schema for a size
+const sizeSchema = Joi.object({
+  _id: Joi.string().custom(objectId).optional(),
+  name: Joi.string().required(), // e.g., "S", "M", "L"
+  image: Joi.string().uri().optional(),
+  quantityPrice: Joi.array().items(quantityPriceSchema).required(),
+});
+
+// Schema for a style
 const styleSchema = Joi.object({
   _id: Joi.string().custom(objectId).optional(),
   name: Joi.string().required(),
@@ -24,28 +23,34 @@ const styleSchema = Joi.object({
   sizes: Joi.array().items(sizeSchema).required(),
 });
 
-// Schema for an option (used for all types of options)
-const optionSchema = Joi.object({
-  _id: Joi.string().custom(objectId).optional(),
-  type: Joi.string().required(), // e.g., "versions", "proofOptions", etc.
-  cards: Joi.array()
-    .items(
-      Joi.object({
-        title: Joi.string().required(), // Title for each card
-        image: Joi.string().uri().optional(), // Image URL for each card
-      })
-    )
-    .required(), // Ensure at least one card is provided
+// Schema for cards inside an option
+const cardSchema = Joi.object({
+  title: Joi.string().required(),
+  image: Joi.string().uri().optional(),
 });
 
-// Schema for a description with styles and options
+// Schema for options
+const optionsSchema = Joi.object({
+  _id: Joi.string().custom(objectId).optional(),
+  type: Joi.string().required(), // e.g., "versions", "proofOptions"
+  cards: Joi.array().items(cardSchema).required(),
+});
+
+// Schema for a product description
+const productDescriptionSchema = Joi.object({
+  title: Joi.string().optional(),
+  image: Joi.string().uri().optional(),
+  descriptions: Joi.string().optional(),
+});
+
+// Schema for a single description
 const descriptionSchema = Joi.object({
   descriptionTitle: Joi.string().optional(),
   text: Joi.string().optional(),
-  images: Joi.array().items(Joi.string().uri()).required(),
+  images: Joi.array().items(Joi.string().uri()).optional(),
   styles: Joi.array().items(styleSchema).required(),
-  options: Joi.array().items(optionSchema).optional(), // Unified options array
-  comments: Joi.string().optional(), // Optional comments field
+  options: Joi.array().items(optionsSchema).optional(),
+  comments: Joi.string().optional(),
 });
 
 // Validation schema for creating a product
@@ -54,19 +59,20 @@ const createProduct = {
     title: Joi.string().required(),
     image: Joi.string().uri().required(),
     descriptions: Joi.array().items(descriptionSchema).required(),
+    productDescription: Joi.array().items(productDescriptionSchema).optional(),
   }),
 };
 
-// Validation schema for getting multiple products with pagination
+// Validation schema for getting products (pagination and sorting)
 const getProducts = {
   query: Joi.object().keys({
-    sortBy: Joi.string(),
-    limit: Joi.number().integer(),
-    page: Joi.number().integer(),
+    sortBy: Joi.string().optional(),
+    limit: Joi.number().integer().optional(),
+    page: Joi.number().integer().optional(),
   }),
 };
 
-// Validation schema for getting a single product by ID
+// Validation schema for retrieving a single product
 const getProduct = {
   params: Joi.object().keys({
     productId: Joi.string().custom(objectId).required(),
@@ -80,11 +86,12 @@ const updateProduct = {
   }),
   body: Joi.object()
     .keys({
-      title: Joi.string(),
-      image: Joi.string().uri(),
-      descriptions: Joi.array().items(descriptionSchema),
+      title: Joi.string().optional(),
+      image: Joi.string().uri().optional(),
+      descriptions: Joi.array().items(descriptionSchema).optional(),
+      productDescription: Joi.array().items(productDescriptionSchema).optional(),
     })
-    .min(1), // Ensures at least one field is being updated
+    .min(1), // Ensures at least one field is updated
 };
 
 // Validation schema for deleting a product
