@@ -25,6 +25,7 @@ const styleSchema = Joi.object({
 
 // Schema for cards inside an option
 const cardSchema = Joi.object({
+  _id: Joi.string().custom(objectId).optional(),
   title: Joi.string().required(),
   image: Joi.string().uri().optional(),
 });

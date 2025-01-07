@@ -11,6 +11,7 @@ const requestquoteRoute = require('./requestquote.route');
 const pendingCheckoutRoute = require('./pendingCheckout.route');
 const designQuoteRoute = require('./designQuote.route');
 const checkoutRoute = require('./checkout.route');
+const accountAddress = require('./accountAddress.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -59,6 +60,10 @@ const defaultRoutes = [
   {
     path: '/checkout',
     route: checkoutRoute,
+  },
+  {
+    path: '/accountaddress',
+    route: accountAddress,
   },
 ];
 

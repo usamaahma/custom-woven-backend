@@ -37,7 +37,7 @@ const getProduct = catchAsync(async (req, res) => {
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
-  res.send(product);
+  res.send({ ...product, productDescription: product.productDescription || [] });
 });
 
 /**
