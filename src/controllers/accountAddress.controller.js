@@ -33,7 +33,7 @@ const getAccountAddresses = async (req, res) => {
 const getAccountAddress = async (req, res) => {
   try {
     const { addressId } = req.params;
-    const address = await AccountAddressService.getAccountAddress(addressId);
+    const address = await AccountAddressService.getAccountAddressesByUserId(addressId);
     res.status(200).json(address);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -45,7 +45,7 @@ const updateAccountAddress = async (req, res) => {
   try {
     const { addressId } = req.params;
     const updatedData = req.body;
-    const updatedAddress = await AccountAddressService.updateAccountAddress(addressId, updatedData);
+    const updatedAddress = await AccountAddressService.updateAccountAddressById(addressId, updatedData);
     res.status(200).json(updatedAddress);
   } catch (error) {
     res.status(400).json({ message: error.message });
