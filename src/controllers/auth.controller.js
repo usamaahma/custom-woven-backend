@@ -59,12 +59,11 @@ const forgotPassword = catchAsync(async (req, res) => {
 
 const resetPassword = catchAsync(async (req, res) => {
   const { currentPassword, newPassword } = req.body;
-  const { userId } = req.params; // Destructuring userId from req.params
+  const { userId } = req.params;
 
   if (!userId) {
     throw new ApiError(400, 'User ID is missing in parameters');
   }
-
   const result = await authService.resetPassword(userId, currentPassword, newPassword);
   res.status(httpStatus.OK).send(result);
 });
