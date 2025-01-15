@@ -9,11 +9,9 @@ const createOrder = async (req, res) => {
   try {
     const paymentDetails = req.body;
     const order = await PaypalService.createOrder(paymentDetails);
-    const approvalUrl = order.links.find((link) => link.rel === 'approve').href;
-    res.redirect(approvalUrl);
-    res.status(201).json({ message: 'Order created successfully', order });
+    return res.status(201).json({ message: 'Order created successfully', order }); // Added return to stop further code execution
   } catch (error) {
-    res.status(500).json({ message: `Error creating PayPal order: ${error.message}` });
+    return res.status(500).json({ message: `Error creating PayPal order: ${error.message}` });
   }
 };
 
