@@ -117,29 +117,6 @@ const checkoutProductSchema = new mongoose.Schema({
 
 // Payment Schema
 const paymentSchema = new mongoose.Schema({
-  method: {
-    type: String,
-    required: true,
-    enum: ['PayPal'], // Only PayPal
-    default: 'PayPal',
-  },
-  totalAmount: {
-    type: String,
-    required: true,
-  },
-  currency: {
-    type: String,
-    required: true,
-    default: 'USD',
-  },
-  transactionId: {
-    type: String,
-    required: false, // Will be set after PayPal returns the response
-  },
-  payerEmail: {
-    type: String,
-    required: false, // Optional, can store the payer's email from PayPal
-  },
   status: {
     type: String,
     required: true,

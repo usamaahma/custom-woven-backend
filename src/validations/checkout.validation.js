@@ -34,11 +34,6 @@ const checkoutProductSchema = Joi.object({
 
 // Payment Validation Schema
 const paymentSchema = Joi.object({
-  method: Joi.string().valid('PayPal').required(),
-  totalAmount: Joi.number().positive().required(),
-  currency: Joi.string().default('USD'),
-  transactionId: Joi.string().allow(null),
-  payerEmail: Joi.string().email().allow(null),
   status: Joi.string().valid('Pending', 'Completed', 'Failed').default('Pending'),
 });
 
