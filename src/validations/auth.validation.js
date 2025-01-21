@@ -44,11 +44,18 @@ const forgotPassword = {
 };
 
 const resetPassword = {
-  query: Joi.object().keys({
-    token: Joi.string().required(),
+  params: Joi.object().keys({
+    userId: Joi.string().required(), // Validating userId in URL params
   }),
   body: Joi.object().keys({
-    password: Joi.string().required().custom(password),
+    currentPassword: Joi.string().required(),
+    newPassword: Joi.string().required().custom(password), // Custom password validation
+  }),
+};
+const resPassword = {
+  body: Joi.object().keys({
+    resetPasswordToken: Joi.string().required(),
+    newPassword: Joi.string().required().custom(password), // Custom password validation
   }),
 };
 
@@ -67,4 +74,5 @@ module.exports = {
   resetPassword,
   verifyEmail,
   registerGoogle,
+  resPassword,
 };

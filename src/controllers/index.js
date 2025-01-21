@@ -10,3 +10,4 @@ module.exports.checkoutController = require('./checkout.controller');
 module.exports.designQuoteController = require('./designQuote.controller');
 module.exports.accountAddressController = require('./accountAddress.controller');
 module.exports.NewsLetterController = require('./newsletter.controller');
+module.exports.PaypalController = require('./paypal.controller');

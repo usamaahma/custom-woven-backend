@@ -13,6 +13,7 @@ const designQuoteRoute = require('./designQuote.route');
 const checkoutRoute = require('./checkout.route');
 const accountAddress = require('./accountAddress.route');
 const NewsLetter = require('./newsletter.route');
+const PaypalRoute = require('./paypal.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -69,6 +70,10 @@ const defaultRoutes = [
   {
     path: '/newsletter',
     route: NewsLetter,
+  },
+  {
+    path: '/paypal',
+    route: PaypalRoute,
   },
 ];
 
