@@ -102,6 +102,20 @@ const generateResetPasswordToken = async (email) => {
 };
 
 /**
+ * Generate a password reset token
+ * @param {string} userId
+ * @returns {string} Password reset token
+ */
+const generateResPasswordToken = (userId) => {
+  const payload = {
+    userId,
+    type: tokenTypes.RESET_PASSWORD,
+  };
+
+  // Generate the reset password token (expires in 1 hour)
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+};
+/**
  * Generate verify email token
  * @param {User} user
  * @returns {Promise<string>}
@@ -112,6 +126,48 @@ const generateVerifyEmailToken = async (user) => {
   await saveToken(verifyEmailToken, user.id, expires, tokenTypes.VERIFY_EMAIL);
   return verifyEmailToken;
 };
+/**
+ * Verify the reset password token
+ * @param {string} token
+ * @returns {Promise<string>} User ID
+ */
+const verifyResPasswordToken = async (token) => {
+  try {
+    // console.log('Token received for verification:', token);
+
+    // Verify the JWT token
+    const decoded = jwt.verify(token, 'thisisasamplesecret'); // Replace with your secret key
+    // console.log('Decoded Token:', decoded);
+
+    if (decoded.type !== tokenTypes.RESET_PASSWORD) {
+      // console.error('Invalid token type:', decoded.type);
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid reset password token');
+    }
+
+    // Fetch token record from the database to ensure it is valid and not expired
+    const tokenRecord = await Token.findOne({
+      token,
+      type: tokenTypes.RESET_PASSWORD,
+      expires: { $gt: Date.now() }, // Ensure token is not expired
+    });
+
+    if (!tokenRecord) {
+      // console.error('Token not found or expired:', token);
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid or expired reset password token');
+    }
+
+    if (tokenRecord.blacklisted) {
+      // console.error('Token is blacklisted:', token);
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid or expired reset password token');
+    }
+
+    // console.log('Token verified successfully for user ID:', decoded.sub);
+    return decoded.sub; // Return the user ID from the decoded token
+  } catch (error) {
+    // console.error('Error verifying reset password token:', error.message);
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid or expired reset password token');
+  }
+};
 
 module.exports = {
   generateToken,
@@ -120,4 +176,6 @@ module.exports = {
   generateAuthTokens,
   generateResetPasswordToken,
   generateVerifyEmailToken,
+  generateResPasswordToken,
+  verifyResPasswordToken,
 };
