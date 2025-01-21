@@ -68,6 +68,12 @@ const resetPassword = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(result);
 });
 
+const resPassword = catchAsync(async (req, res) => {
+  const { resetPasswordToken, newPassword } = req.body;
+  const result = await authService.resPassword(resetPasswordToken, newPassword);
+  res.status(httpStatus.OK).send(result);
+});
+
 const sendVerificationEmail = catchAsync(async (req, res) => {
   const verifyEmailToken = await tokenService.generateVerifyEmailToken(req.user);
   await emailService.sendVerificationEmail(req.user.email, verifyEmailToken);
@@ -89,4 +95,5 @@ module.exports = {
   sendVerificationEmail,
   verifyEmail,
   registerGoogle,
+  resPassword,
 };

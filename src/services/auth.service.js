@@ -77,6 +77,34 @@ const resetPassword = async (userId, currentPassword, newPassword) => {
 };
 
 /**
+ * Reset password using a token
+ * @param {string} resetPasswordToken
+ * @param {string} newPassword
+ * @returns {Promise}
+ */
+const resPassword = async (resetPasswordToken, newPassword) => {
+  try {
+    const userId = await tokenService.verifyResPasswordToken(resetPasswordToken);
+    if (!userId) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid or expired reset password token');
+    }
+    // console.log('Verified user ID:', userId);
+
+    const user = await userService.getUserById(userId);
+    if (!user) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    }
+
+    await userService.updateUserById(userId, { password: newPassword });
+
+    return { message: 'Password updated successfully' };
+  } catch (error) {
+    // console.error('Error resetting password:', error.message);
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Password reset failed');
+  }
+};
+
+/**
  * Verify email
  * @param {string} verifyEmailToken
  * @returns {Promise}
@@ -101,4 +129,5 @@ module.exports = {
   refreshAuth,
   resetPassword,
   verifyEmail,
+  resPassword,
 };
