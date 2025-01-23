@@ -10,4 +10,5 @@ module.exports.pendingCheckoutValidation = require('./pendingCheckout.validation
 module.exports.checkoutValidation = require('./checkout.validation');
 module.exports.designQuoteValidation = require('./designQuote.validation');
 module.exports.accountAddressValidation = require('./accountAddress.validation');
+module.exports.completedOrderValidation = require('./completedOrder.validation');
 module.exports.NewsLetterValidation = require('./newsletter.validation');
