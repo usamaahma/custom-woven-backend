@@ -13,7 +13,10 @@ const designQuoteRoute = require('./designQuote.route');
 const checkoutRoute = require('./checkout.route');
 const accountAddress = require('./accountAddress.route');
 const NewsLetter = require('./newsletter.route');
-const PaypalRoute = require('./paypal.route');
+const CompletedOrder = require('./completedOrder.route');
+
+// Add an empty line here as required by the rule
+
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -72,8 +75,8 @@ const defaultRoutes = [
     route: NewsLetter,
   },
   {
-    path: '/paypal',
-    route: PaypalRoute,
+    path: '/completedorder',
+    route: CompletedOrder,
   },
 ];
 

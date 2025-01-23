@@ -12,5 +12,5 @@ module.exports.pendingCheckoutService = require('./pendingCheckout.service');
 module.exports.checkoutService = require('./checkout.service');
 module.exports.designQuoteService = require('./designQuote.service');
 module.exports.accountAddressService = require('./accountAddress.service');
+module.exports.completedOrderService = require('./completedOrder.service');
 module.exports.NewsLetterService = require('./newsletter.service');
-module.exports.PaypalService = require('./paypal.service');
