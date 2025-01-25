@@ -39,7 +39,14 @@ const getCompletedOrderById = async (orderId) => {
   }
   return order;
 };
-
+const fetchAllCompletedOrders = async () => {
+  try {
+    const completedOrders = await CompletedOrder.find();
+    return completedOrders;
+  } catch (error) {
+    throw new Error(`Error fetching completed orders: ${error.message}`);
+  }
+};
 /**
  * Update a completed order by orderId
  * @param {ObjectId} orderId
@@ -76,4 +83,5 @@ module.exports = {
   getCompletedOrderById,
   updateCompletedOrderById,
   deleteCompletedOrderById,
+  fetchAllCompletedOrders,
 };

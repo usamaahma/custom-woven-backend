@@ -87,7 +87,12 @@ const getCompletedOrder = {
     orderId: Joi.string().custom(objectId).required(),
   }),
 };
-
+const getAllCompletedOrders = {
+  query: Joi.object().keys({
+    // Optional filters can be added here if you want to filter by userId, etc.
+    userId: Joi.string().custom(objectId), // Optional filter by userId
+  }),
+};
 // Update Completed Order Validation
 const updateCompletedOrder = {
   params: Joi.object().keys({
@@ -123,6 +128,7 @@ module.exports = {
   createCompletedOrder,
   getCompletedOrders,
   getCompletedOrder,
+  getAllCompletedOrders,
   updateCompletedOrder,
   deleteCompletedOrder,
 };
