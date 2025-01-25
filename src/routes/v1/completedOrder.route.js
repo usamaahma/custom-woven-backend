@@ -9,8 +9,8 @@ const router = express.Router();
 router
   .route('/')
   .post(validate(completedOrderValidation.createCompletedOrder), completedOrderController.createCompletedOrder)
-  .get(completedOrderController.getCompletedOrders);
-
+  .get(completedOrderController.getAllCompletedProducts);
+router.route('/usercompletedorder').get(completedOrderController.getCompletedOrders);
 router
   .route('/:orderId')
   .get(

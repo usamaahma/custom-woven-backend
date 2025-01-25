@@ -26,27 +26,39 @@ const createCompletedOrder = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
-
+const getAllCompletedProducts = async (req, res) => {
+  try {
+    const completedOrders = await CompletedOrderService.fetchAllCompletedOrders();
+    res.status(200).json({
+      success: true,
+      message: 'Fetched all completed orders successfully.',
+      data: completedOrders,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'An error occurred while fetching completed orders.',
+    });
+  }
+};
 // Controller to get all completed orders for a user
 const getCompletedOrders = async (req, res) => {
   try {
     const { userId } = req.query; // Optional filtering by userId
 
     if (!userId) {
-      return res.status(400).send({ message: 'User ID is required' }); // Return a bad request if userId is not provided
+      return res.status(400).send({ message: 'User ID is required' });
     }
 
-    // Fetch orders by userId directly
     const orders = await CompletedOrderService.getCompletedOrdersByUserId(userId);
 
     res.status(200).send({
-      orders, // List of all orders for the given user
+      orders,
     });
   } catch (error) {
     res.status(500).send({ message: 'Internal server error' });
   }
 };
-
 // Controller to get a specific completed order by orderId
 const getCompletedOrder = async (req, res) => {
   try {
@@ -87,4 +99,5 @@ module.exports = {
   getCompletedOrder,
   updateCompletedOrder,
   deleteCompletedOrder,
+  getAllCompletedProducts,
 };
