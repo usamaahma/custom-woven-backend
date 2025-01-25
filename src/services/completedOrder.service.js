@@ -23,8 +23,21 @@ const createCompletedOrder = async (orderBody) => {
  * @returns {Promise<CompletedOrder[]>}
  */
 const getCompletedOrdersByUserId = async (userId) => {
-  const orders = await CompletedOrder.find({ userId });
+  const orders = await CompletedOrder.find({ 'user.id': userId }); // Adjusting to find orders by user id in the 'user' object
   return orders;
+};
+
+/**
+ * Get a completed order by orderId
+ * @param {ObjectId} orderId
+ * @returns {Promise<CompletedOrder>}
+ */
+const getCompletedOrderById = async (orderId) => {
+  const order = await CompletedOrder.findById(orderId);
+  if (!order) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Order not found');
+  }
+  return order;
 };
 
 /**
@@ -60,6 +73,7 @@ const deleteCompletedOrderById = async (orderId) => {
 module.exports = {
   createCompletedOrder,
   getCompletedOrdersByUserId,
+  getCompletedOrderById,
   updateCompletedOrderById,
   deleteCompletedOrderById,
 };

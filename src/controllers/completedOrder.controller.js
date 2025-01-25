@@ -1,11 +1,26 @@
-const { CompletedOrder } = require('../models');
 const CompletedOrderService = require('../services/completedOrder.service'); // Import the service
 
 // Controller to create a completed order
 const createCompletedOrder = async (req, res) => {
   try {
-    const { itemName, itemId, price, userId } = req.body;
-    const newOrder = await CompletedOrderService.createCompletedOrder({ itemName, itemId, price, userId });
+    const { itemName, itemId, price, user, billingAddress, shippingAddress, checkoutProducts, payment } = req.body;
+
+    // Ensure that user details are provided correctly
+    if (!user || !user.id || !user.name || !user.email || !user.phoneNumber) {
+      return res.status(400).json({ message: 'User details are incomplete.' });
+    }
+
+    const newOrder = await CompletedOrderService.createCompletedOrder({
+      itemName,
+      itemId,
+      price,
+      user,
+      billingAddress,
+      shippingAddress,
+      checkoutProducts,
+      payment,
+    });
+
     res.status(201).json(newOrder);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -16,13 +31,16 @@ const createCompletedOrder = async (req, res) => {
 const getCompletedOrders = async (req, res) => {
   try {
     const { userId } = req.query; // Optional filtering by userId
-    const filter = userId ? { userId } : {}; // Apply filter if userId exists
-    const total = await CompletedOrder.countDocuments(filter); // Count total documents
-    const orders = await CompletedOrder.find(filter).lean(); // Fetch all completed orders
+
+    if (!userId) {
+      return res.status(400).send({ message: 'User ID is required' }); // Return a bad request if userId is not provided
+    }
+
+    // Fetch orders by userId directly
+    const orders = await CompletedOrderService.getCompletedOrdersByUserId(userId);
 
     res.status(200).send({
-      total, // Total count of orders
-      orders, // List of all orders
+      orders, // List of all orders for the given user
     });
   } catch (error) {
     res.status(500).send({ message: 'Internal server error' });
@@ -33,7 +51,7 @@ const getCompletedOrders = async (req, res) => {
 const getCompletedOrder = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const order = await CompletedOrderService.getCompletedOrdersByUserId(orderId);
+    const order = await CompletedOrderService.getCompletedOrderById(orderId); // Correct service method
     res.status(200).json(order);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -44,7 +62,7 @@ const getCompletedOrder = async (req, res) => {
 const updateCompletedOrder = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const updatedData = req.body;
+    const updatedData = req.body; // Updated data from the body
     const updatedOrder = await CompletedOrderService.updateCompletedOrderById(orderId, updatedData);
     res.status(200).json(updatedOrder);
   } catch (error) {

@@ -2,7 +2,7 @@ const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const completedOrderValidation = require('../../validations/completedOrder.validation'); // Assume you have a validation for completed orders
-const completedOrderController = require('../../controllers/completedOrder.comtroller');
+const completedOrderController = require('../../controllers/completedOrder.controller');
 
 const router = express.Router();
 
