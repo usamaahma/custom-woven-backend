@@ -14,6 +14,7 @@ const checkoutRoute = require('./checkout.route');
 const accountAddress = require('./accountAddress.route');
 const NewsLetter = require('./newsletter.route');
 const CompletedOrder = require('./completedOrder.route');
+const SeoRoute = require('./seo.route');
 
 // Add an empty line here as required by the rule
 
@@ -77,6 +78,10 @@ const defaultRoutes = [
   {
     path: '/completedorder',
     route: CompletedOrder,
+  },
+  {
+    path: '/seo',
+    route: SeoRoute,
   },
 ];
 

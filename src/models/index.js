@@ -12,3 +12,4 @@ module.exports.DesignQuote = require('./designQuote.model');
 module.exports.AccountAddress = require('./accountAddress.model');
 module.exports.CompletedOrder = require('./completedorder.model');
 module.exports.NewsLetter = require('./newsletter.model');
+module.exports.Seo = require('./seo.model');
