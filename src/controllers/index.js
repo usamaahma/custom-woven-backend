@@ -11,3 +11,4 @@ module.exports.designQuoteController = require('./designQuote.controller');
 module.exports.accountAddressController = require('./accountAddress.controller');
 module.exports.completedOrderController = require('./completedOrder.controller');
 module.exports.NewsLetterController = require('./newsletter.controller');
+module.exports.SeoController = require('./seo.controller');
