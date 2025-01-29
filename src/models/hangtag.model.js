@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid'); // Import UUID for generating unique SKUs
 const { toJSON, paginate } = require('./plugins');
 
 const sizeSchema = new mongoose.Schema({
@@ -52,7 +53,12 @@ const hangtagSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
+hangtagSchema.pre('save', function (next) {
+  if (!this.sku) {
+    this.sku = `SKU-${uuidv4().split('-')[0].toUpperCase()}`; // Generate a unique SKU
+  }
+  next();
+});
 // Plugins for JSON conversion and pagination
 hangtagSchema.plugin(toJSON);
 hangtagSchema.plugin(paginate);

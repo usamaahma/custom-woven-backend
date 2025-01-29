@@ -9,9 +9,7 @@ const seoSchema = new mongoose.Schema(
     script: { type: String }, // Script for custom meta tags or tracking
     productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true }, // Reference to Product
   },
-  {
-    timestamps: true, // Automatically adds createdAt and updatedAt timestamps
-  }
+  { timestamps: true } // Moved inside the second argument (schema options)
 );
 
 // Plugins for JSON conversion and pagination
