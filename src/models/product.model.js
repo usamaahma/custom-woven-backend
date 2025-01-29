@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid'); // Import UUID for generating unique SKUs
 const { toJSON, paginate } = require('./plugins');
 
 const sizeSchema = new mongoose.Schema({
@@ -45,6 +46,7 @@ const productDescription = new mongoose.Schema({
 const productSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
+    sku: { type: String, unique: true, trim: true }, // SKU (Stock Keeping Unit)
     image: { type: String, required: true },
     descriptions: [descriptionSchema], // Array of descriptions with styles and other options
     productDescription: [productDescription],
@@ -53,7 +55,12 @@ const productSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
+productSchema.pre('save', function (next) {
+  if (!this.sku) {
+    this.sku = `SKU-${uuidv4().split('-')[0].toUpperCase()}`; // Generate a unique SKU
+  }
+  next();
+});
 // Plugins for JSON conversion and pagination
 productSchema.plugin(toJSON);
 productSchema.plugin(paginate);
