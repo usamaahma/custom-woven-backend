@@ -7,8 +7,7 @@ const createQuote = {
   body: Joi.object().keys({
     product: Joi.string().required(),
     artwork: Joi.array().required(),
-    width: Joi.number().required(),
-    height: Joi.number().required(),
+    size: Joi.string().required(),
     quantity: Joi.number().required(),
     name: Joi.string().required(),
     email: Joi.string().email().required(),
@@ -33,8 +32,7 @@ const updateQuote = {
     .keys({
       product: Joi.string(),
       artwork: Joi.string(),
-      width: Joi.string(),
-      height: Joi.string(),
+      size: Joi.string().required(),
       quantity: Joi.string(),
       name: Joi.string(),
       email: Joi.string().email(),
