@@ -11,12 +11,8 @@ const GetQuoteSchema = mongoose.Schema(
       type: Array,
       required: true,
     },
-    width: {
-      type: Number,
-      required: true,
-    },
-    height: {
-      type: Number,
+    size: {
+      type: String,
       required: true,
     },
     quantity: {
