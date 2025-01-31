@@ -12,7 +12,6 @@ const createQuote = {
     name: Joi.string().required(),
     email: Joi.string().email().required(),
     phonenumber: Joi.number().required(),
-    comments: Joi.string().optional(),
   }),
 };
 
@@ -37,7 +36,6 @@ const updateQuote = {
       name: Joi.string(),
       email: Joi.string().email(),
       phonenumber: Joi.string(),
-      comments: Joi.string(),
     })
     .min(1),
 };

@@ -31,10 +31,6 @@ const GetQuoteSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    comments: {
-      type: String,
-      required: true,
-    },
   },
   {
     timestamps: true,
