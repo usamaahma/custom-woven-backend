@@ -6,7 +6,6 @@ const createSeo = {
   body: Joi.object().keys({
     title: Joi.string().required(), // Title for SEO (required)
     description: Joi.string().required(), // Meta description (required)
-    keywords: Joi.array().items(Joi.string()).required(), // Array of keywords (required)
     script: Joi.string().optional(), // Custom script (optional)
     productId: Joi.string().custom(objectId).required(), // Product ID (required)
   }),
@@ -38,7 +37,6 @@ const updateSeo = {
     .keys({
       title: Joi.string().optional(), // Title (optional)
       description: Joi.string().optional(), // Meta description (optional)
-      keywords: Joi.array().items(Joi.string()).optional(), // Keywords array (optional)
       script: Joi.string().optional(), // Script (optional)
       productId: Joi.string().custom(objectId).optional(), // Product ID (optional)
     })
