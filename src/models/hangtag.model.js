@@ -45,6 +45,7 @@ const hangtagDescriptionSchema = new mongoose.Schema({
 const hangtagSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
+    sku: { type: String, unique: true, trim: true }, // SKU (Stock Keeping Unit)
     image: { type: String, required: true },
     descriptions: [descriptionSchema],
     hangtagDescription: [hangtagDescriptionSchema], // Array of descriptions with styles and other options
