@@ -15,3 +15,4 @@ module.exports.accountAddressService = require('./accountAddress.service');
 module.exports.completedOrderService = require('./completedOrder.service');
 module.exports.NewsLetterService = require('./newsletter.service');
 module.exports.SeoService = require('./seo.service');
+module.exports.ProductSeoService = require('./productseo.service');
