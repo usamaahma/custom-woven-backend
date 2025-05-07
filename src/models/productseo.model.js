@@ -13,8 +13,7 @@ const productSeoSchema = new mongoose.Schema(
     title: { type: String, required: true, trim: true }, // Title for SEO
     description: { type: String, required: true }, // Meta description
     script: { type: String }, // Script for custom meta tags or tracking
-    productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true }, // Reference to Product
-    // FAQs (Multiple)
+    productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
     faqs: [faqSchema],
     // Google Shopping Data
     googleShopping: {
